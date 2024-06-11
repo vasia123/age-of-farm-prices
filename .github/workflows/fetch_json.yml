@@ -43,7 +43,7 @@ jobs:
         git add .
         git commit -m "Update JSON data" || echo "No changes to commit"
         
-    - name: Push changes
+    - name: Push changes to main
       run: |
         git pull origin main
         git push origin main --force
