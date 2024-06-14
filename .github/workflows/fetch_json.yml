@@ -40,6 +40,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git config pull.rebase true
         git add .
         git commit -m "Update JSON data" || echo "No changes to commit"
         
