@@ -1,0 +1,70 @@
+name: Fetch Item Prices every 5 min
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Запуск каждые 5 минут
+
+jobs:
+  fetch_item_prices:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Получаем полную историю репозитория
+
+    - name: Fetch Item Prices
+      run: |
+        current_date=$(date +%Y-%m-%d)
+        current_year_month=$(date +%Y-%m)
+        current_day=$(date +%d)
+        current_time=$(date +%H:%M:%S)
+
+        mkdir -p "$current_year_month"
+
+        json_file="$current_year_month/$current_day-item-prices.json"
+
+        # Массив с названиями предметов
+        items=("Common Axe" "Uncommon Axe" "Rare Axe" "Epic Axe" "Legendary Axe")
+
+        # Создаем временный файл для хранения цен
+        prices_file=$(mktemp)
+
+        # Цикл по названиям предметов
+        for item in "${items[@]}"
+        do
+            # Выполняем GraphQL-запрос для получения цены предмета
+            
+            query='{"query":"query nftSearch($count: Int!, $cursor: String, $query: String, $sort: String, $attributes: String) {\n  alphaNftItemSearch(\n      first: $count\n      after: $cursor\n      query: $query\n      sort: $sort\n      attributes: $attributes\n  ) {\n    edges {\n      node {\n        name\n        sale {\n          ... on NftSaleFixPrice {\n            fullPrice\n          }\n        }\n      }\n    }\n  }\n}","variables":{"count":1,"query":"{\"$and\":[{\"collectionAddress\":\"EQCacs0fOBdHPrOuzscIFHbCytC1MfxcWGRRoqFOJTZwrNSK\"},{\"saleType\":\"fix_price\"},{\"search\":\"'$item'\"}]}","sort":"[{\"isOnSale\":{\"order\":\"desc\"}},{\"price\":{\"order\":\"asc\"}},{\"index\":{\"order\":\"asc\"}}]"},"operationName":"nftSearch"}'
+
+            rawprice=$(curl -s 'https://api.getgems.io/graphql' -H 'content-type: application/json' -H 'referer: https://api.getgems.io/graphql' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36' --data-raw "$query")
+            price=$(echo "$rawprice" | jq -r '.data.alphaNftItemSearch.edges[0].node.sale.fullPrice')
+
+            
+            # Записываем цену во временный файл
+            echo "\"$item\": \"$price\"," >> "$prices_file"
+        done
+
+        # Создаем JSON с ценами предметов
+        echo "{$(cat "$prices_file" | sed '$s/,$//'), \"requestTime\": \"$current_time\"}" > item_prices.json
+
+        if [ -f "$json_file" ]; then
+            # Если файл существует, добавляем новые данные в массив
+            jq --slurpfile new_data item_prices.json '$new_data[0] as $item | . + [$item]' "$json_file" > temp.json
+            mv temp.json "$json_file"
+        else
+            # Если файл не существует, создаем новый файл с массивом
+            jq -s '[ .[0] ]' item_prices.json > "$json_file"
+        fi
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update item prices data" || echo "No changes to commit"
+
+    - name: Push changes to main
+      run: |
+        git pull origin main
+        git push origin main --force
