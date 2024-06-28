@@ -26,7 +26,7 @@ jobs:
 
         # Массив с названиями предметов
         rarities=("Common" "Uncommon" "Rare" "Epic" "Legendary")
-        items=("Axe" "Pickaxe" "Spear")
+        items=("Axe" "Pickaxe" "Spear" "Bow")
 
         # Создаем временный файл для хранения цен
         prices_file=$(mktemp)
