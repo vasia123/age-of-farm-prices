@@ -1240,5 +1240,28 @@
     "Legendary Spear": "30000000000",
     "Legendary Bow": "12200000000",
     "requestTime": "2024-07-19 14:53:04"
+  },
+  {
+    "Common Axe": "580000000",
+    "Common Pickaxe": "590000000",
+    "Common Spear": "590000000",
+    "Common Bow": "1400000000",
+    "Uncommon Axe": "1850000000",
+    "Uncommon Pickaxe": "1200000000",
+    "Uncommon Spear": "1000000000",
+    "Uncommon Bow": "1300000000",
+    "Rare Axe": "4900000000",
+    "Rare Pickaxe": "4300000000",
+    "Rare Spear": "3950000000",
+    "Rare Bow": "5000000000",
+    "Epic Axe": "8000000000",
+    "Epic Pickaxe": "8500000000",
+    "Epic Spear": "7500000000",
+    "Epic Bow": "3900000000",
+    "Legendary Axe": "null",
+    "Legendary Pickaxe": "null",
+    "Legendary Spear": "30000000000",
+    "Legendary Bow": "12200000000",
+    "requestTime": "2024-07-19 15:11:35"
   }
 ]
