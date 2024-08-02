@@ -6,10 +6,10 @@
 "Uncommon Pickaxe": "1100000000",
 "Uncommon Spear": "1500000000",
 "Uncommon Bow": "1500000000",
-"Rare Axe": "2500000000",
-"Rare Pickaxe": "4400000000",
+"Rare Axe": "3900000000",
+"Rare Pickaxe": "4500000000",
 "Rare Spear": "3200000000",
-"Rare Bow": "2500000000",
+"Rare Bow": "null",
 "Epic Axe": "6500000000",
 "Epic Pickaxe": "6500000000",
 "Epic Spear": "6500000000",
@@ -17,4 +17,4 @@
 "Legendary Axe": "15000000000",
 "Legendary Pickaxe": "15000000000",
 "Legendary Spear": "30000000000",
-"Legendary Bow": "11200000000", "requestTime": "2024-08-02 05:29:30"}
+"Legendary Bow": "11200000000", "requestTime": "2024-08-02 05:39:32"}
